@@ -115,9 +115,9 @@ class LudoGame {
             { x: 6, y: 0 }, { x: 7, y: 0 }, { x: 8, y: 0 },
             { x: 8, y: 1 }, { x: 8, y: 2 }, { x: 8, y: 3 }, { x: 8, y: 4 }, { x: 8, y: 5 },
             { x: 9, y: 6 }, { x: 10, y: 6 }, { x: 11, y: 6 }, { x: 12, y: 6 }, { x: 13, y: 6 },
-            { x: 14, y: 6 }, { x: 14, y: 7 },
-            { x: 14, y: 8 },
-            { x: 13, y: 8 }, { x: 12, y: 8 }, { x: 11, y: 8 }, { x: 10, y: 8 }, { x: 9, y: 8 },
+            { x: 14, y: 6 },
+            { x: 13, y: 8 },
+            { x: 12, y: 8 }, { x: 11, y: 8 }, { x: 10, y: 8 }, { x: 9, y: 8 },
             { x: 8, y: 9 }, { x: 8, y: 10 }, { x: 8, y: 11 }, { x: 8, y: 12 }, { x: 8, y: 13 },
             { x: 8, y: 14 }, { x: 7, y: 14 }, { x: 6, y: 14 },
             { x: 6, y: 13 }, { x: 6, y: 12 }, { x: 6, y: 11 }, { x: 6, y: 10 }, { x: 6, y: 9 },
@@ -125,17 +125,17 @@ class LudoGame {
         ];
 
         const homePaths = {
-            red: [{ x: 1, y: 7 }, { x: 2, y: 7 }, { x: 3, y: 7 }, { x: 4, y: 7 }, { x: 5, y: 7 }],
-            green: [{ x: 7, y: 1 }, { x: 7, y: 2 }, { x: 7, y: 3 }, { x: 7, y: 4 }, { x: 7, y: 5 }],
-            yellow: [{ x: 13, y: 7 }, { x: 12, y: 7 }, { x: 11, y: 7 }, { x: 10, y: 7 }, { x: 9, y: 7 }],
-            blue: [{ x: 7, y: 13 }, { x: 7, y: 12 }, { x: 7, y: 11 }, { x: 7, y: 10 }, { x: 7, y: 9 }]
+            red: [{ x: 1, y: 7 }, { x: 2, y: 7 }, { x: 3, y: 7 }],
+            green: [{ x: 7, y: 1 }, { x: 7, y: 2 }, { x: 7, y: 3 }],
+            yellow: [{ x: 13, y: 7 }, { x: 12, y: 7 }, { x: 11, y: 7 }],
+            blue: [{ x: 7, y: 13 }, { x: 7, y: 12 }, { x: 7, y: 11 }]
         };
 
         const startPositions = {
-            red: 0,
+            red: 2,
             green: 15,
             yellow: 26,
-            blue: 40
+            blue: 39
         };
 
         const start = startPositions[color];
@@ -431,9 +431,9 @@ class LudoGame {
 
     drawStartingPositions() {
         const startPositions = [
-            { x: 0, y: 7, color: 'red', hasStar: true },
+            { x: 1, y: 6, color: 'red', hasStar: true },
             { x: 8, y: 1, color: 'green', hasStar: true },
-            { x: 14, y: 7, color: 'yellow', hasStar: true },
+            { x: 13, y: 8, color: 'yellow', hasStar: true },
             { x: 6, y: 13, color: 'blue', hasStar: true }
         ];
 
@@ -550,7 +550,7 @@ class LudoGame {
     drawCenterTriangle() {
         const cx = 7.5 * this.cellSize;
         const cy = 7.5 * this.cellSize;
-        const triSize = this.cellSize * 0.6;
+        const triSize = this.cellSize * 1.0;
         
         this.ctx.fillStyle = this.colorMap.blue;
         this.ctx.beginPath();
@@ -743,7 +743,7 @@ class LudoGame {
             if (piece.inHome) return roll === 6;
             if (piece.inGoal) return false;
             const newPos = piece.position + roll;
-            return newPos <= 55;
+            return newPos <= 53;
         });
     }
 
@@ -797,7 +797,7 @@ class LudoGame {
             });
         } else if (!piece.inHome && !piece.inGoal) {
             const newPosition = piece.position + roll;
-            const maxPosition = 55;
+            const maxPosition = 53;
             
             if (newPosition === maxPosition) {
                 piece.inGoal = true;
@@ -910,7 +910,7 @@ class LudoGame {
             { x: 2, y: 8 }, { x: 6, y: 2 }, { x: 12, y: 6 }, { x: 8, y: 12 }
         ];
         const startingSpotCoords = [
-            { x: 0, y: 7 }, { x: 8, y: 1 }, { x: 14, y: 7 }, { x: 6, y: 13 }
+            { x: 1, y: 6 }, { x: 8, y: 1 }, { x: 13, y: 8 }, { x: 6, y: 13 }
         ];
         
         const isSafeSpot = safeSpotCoords.some(s => s.x === pathPos.x && s.y === pathPos.y) ||
@@ -923,7 +923,7 @@ class LudoGame {
             if (otherColor === color) return;
             
             const otherPiecesAtSameSpot = otherPieces.filter(op => {
-                if (op.inHome || op.inGoal || op.position >= 51) return false;
+                if (op.inHome || op.inGoal || op.position >= 50) return false;
                 const otherPathPos = this.paths[otherColor][op.position];
                 return pathPos.x === otherPathPos.x && pathPos.y === otherPathPos.y;
             });
@@ -947,7 +947,7 @@ class LudoGame {
     getGlobalPosition(color, position) {
         if (position >= 50) return -1;
         
-        const startOffsets = { red: 0, green: 15, yellow: 26, blue: 40 };
+        const startOffsets = { red: 2, green: 15, yellow: 26, blue: 39 };
         return (position + startOffsets[color]) % 50;
     }
 
@@ -1021,7 +1021,7 @@ class LudoGame {
             if (piece.inHome) return roll === 6;
             if (piece.inGoal) return false;
             const newPos = piece.position + roll;
-            return newPos <= 55;
+            return newPos <= 53;
         });
     }
 
